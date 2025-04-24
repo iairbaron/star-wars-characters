@@ -59,10 +59,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => controller.loadCharacters(),
-        child: const Icon(Icons.refresh),
-      ),
     );
   }
 }

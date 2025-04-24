@@ -18,7 +18,7 @@ class CharacterGrid extends StatelessWidget {
         crossAxisCount: 4,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 0.75,
+        childAspectRatio: 0.7,
       ),
       itemCount: characters.length,
       itemBuilder: (context, index) {
