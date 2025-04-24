@@ -9,6 +9,7 @@ class Character {
   final String? species;
   final String? birthYear;
   final List<String>? affiliations;
+  final bool isFavorite;
 
   Character({
     required this.id,
@@ -21,7 +22,36 @@ class Character {
     this.species,
     this.birthYear,
     this.affiliations,
+    this.isFavorite = false,
   });
+
+  Character copyWith({
+    int? id,
+    String? name,
+    String? image,
+    String? gender,
+    double? height,
+    double? mass,
+    String? homeworld,
+    String? species,
+    String? birthYear,
+    List<String>? affiliations,
+    bool? isFavorite,
+  }) {
+    return Character(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      gender: gender ?? this.gender,
+      height: height ?? this.height,
+      mass: mass ?? this.mass,
+      homeworld: homeworld ?? this.homeworld,
+      species: species ?? this.species,
+      birthYear: birthYear ?? this.birthYear,
+      affiliations: affiliations ?? this.affiliations,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 
   factory Character.fromJson(Map<String, dynamic> json) {
     // Función auxiliar para manejar conversiones seguras
@@ -54,12 +84,29 @@ class Character {
         affiliations: (json['affiliations'] as List<dynamic>?)
             ?.map((e) => e.toString())
             .toList() ?? [],
+        isFavorite: json['isFavorite'] ?? false,
       );
     } catch (e) {
       print('Error parsing character: $json');
       print('Error details: $e');
       rethrow;
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'image': image,
+      'gender': gender,
+      'height': height,
+      'mass': mass,
+      'homeworld': homeworld,
+      'species': species,
+      'birthYear': birthYear,
+      'affiliations': affiliations,
+      'isFavorite': isFavorite,
+    };
   }
 }
 
