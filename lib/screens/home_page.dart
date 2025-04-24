@@ -4,7 +4,7 @@ import '../controllers/character_controller.dart';
 import '../widgets/character_grid.dart';
 import '../widgets/error_view.dart';
 import '../widgets/pagination_controls.dart';
-import '../widgets/search_bar.dart';
+import 'search_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -21,6 +21,17 @@ class _HomePageState extends ConsumerState<HomePage> {
     Future.microtask(() => ref.read(characterControllerProvider.notifier).loadCharacters());
   }
 
+  void _openSearchPage() {
+    final state = ref.read(characterControllerProvider);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SearchPage(
+          allCharacters: state.allCharacters,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(characterControllerProvider);
@@ -29,7 +40,33 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Star Wars Characters'),
-        bottom: CharacterSearchBar(onSearch: controller.search),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: _openSearchPage,
+              child: AbsorbPointer(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Buscar personaje...',
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: state.error != null
           ? ErrorView(
