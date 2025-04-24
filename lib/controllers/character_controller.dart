@@ -46,9 +46,9 @@ class CharacterController extends StateNotifier<CharacterState> {
 
       state = state.copyWith(
         allCharacters: charactersWithFavorites,
-        displayedCharacters: charactersWithFavorites,
         isLoading: false,
       );
+      _updateDisplayedCharacters();
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
