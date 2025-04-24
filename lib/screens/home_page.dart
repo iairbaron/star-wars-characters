@@ -6,11 +6,23 @@ import '../widgets/error_view.dart';
 import '../widgets/pagination_controls.dart';
 import '../widgets/search_bar.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Cargar los personajes cuando se inicia la página
+    Future.microtask(() => ref.read(characterControllerProvider.notifier).loadCharacters());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(characterControllerProvider);
     final controller = ref.read(characterControllerProvider.notifier);
 
@@ -51,29 +63,6 @@ class HomePage extends ConsumerWidget {
         onPressed: () => controller.loadCharacters(),
         child: const Icon(Icons.refresh),
       ),
-    );
-  }
-}
-
-class CharacterTile extends StatelessWidget {
-  final Character character;
-
-  const CharacterTile({super.key, required this.character});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Image.network(
-        character.image,
-        width: 50,
-        height: 50,
-        fit: BoxFit.cover,
-        errorBuilder:
-            (context, error, stackTrace) =>
-                const Icon(Icons.image_not_supported),
-      ),
-      title: Text(character.name),
-      subtitle: Text(character.gender),
     );
   }
 }

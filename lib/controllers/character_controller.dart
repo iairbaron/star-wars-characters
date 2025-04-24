@@ -9,10 +9,14 @@ class CharacterController extends StateNotifier<CharacterState> {
   CharacterController(this._service) : super(CharacterState.initial());
 
   Future<void> loadCharacters() async {
+    if (state.isLoading) return; // Evitar múltiples cargas simultáneas
+    
     state = state.copyWith(isLoading: true, error: null);
 
     try {
       final characters = await _service.fetchCharacters();
+      if (!mounted) return; // Evitar actualizar el estado si el widget fue desmontado
+      
       state = state.copyWith(
         allCharacters: characters,
         isLoading: false,
@@ -20,6 +24,8 @@ class CharacterController extends StateNotifier<CharacterState> {
       );
       _updateDisplayedCharacters();
     } catch (e) {
+      if (!mounted) return;
+      
       state = state.copyWith(
         isLoading: false,
         error: 'Error al cargar los personajes: ${e.toString()}',
@@ -28,6 +34,8 @@ class CharacterController extends StateNotifier<CharacterState> {
   }
 
   void search(String query) {
+    if (state.isLoading) return;
+    
     final filtered = state.allCharacters
         .where((char) =>
             char.name.toLowerCase().contains(query.trim().toLowerCase()))
@@ -41,14 +49,14 @@ class CharacterController extends StateNotifier<CharacterState> {
   }
 
   void nextPage() {
-    if (state.hasNextPage) {
+    if (state.hasNextPage && !state.isLoading) {
       state = state.copyWith(currentPage: state.currentPage + 1);
       _updateDisplayedCharacters();
     }
   }
 
   void previousPage() {
-    if (state.hasPreviousPage) {
+    if (state.hasPreviousPage && !state.isLoading) {
       state = state.copyWith(currentPage: state.currentPage - 1);
       _updateDisplayedCharacters();
     }
