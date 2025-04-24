@@ -47,7 +47,7 @@ class CharacterState {
       searchQuery: '',
       error: null,
       currentPage: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 12,
     );
   }
 

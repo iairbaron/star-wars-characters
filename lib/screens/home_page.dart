@@ -56,11 +56,56 @@ class HomePage extends ConsumerWidget {
                       : state.displayedCharacters.isEmpty
                           ? const Center(
                               child: Text('No hay personajes disponibles'))
-                          : ListView.builder(
+                          : GridView.builder(
+                              padding: const EdgeInsets.all(8),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 8,
+                                mainAxisSpacing: 8,
+                                childAspectRatio: 0.75,
+                              ),
                               itemCount: state.displayedCharacters.length,
                               itemBuilder: (context, index) {
                                 final character = state.displayedCharacters[index];
-                                return CharacterTile(character: character);
+                                return Card(
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                                          child: Image.network(
+                                            character.image,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.image_not_supported),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              character.name,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              character.gender,
+                                              style: const TextStyle(color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
                             ),
                 ),
