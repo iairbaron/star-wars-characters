@@ -30,7 +30,7 @@ class CharacterCard extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                 child: Image.network(
                   character.image,
-                  fit: BoxFit.fill ,
+                  fit: BoxFit.fill,
                   width: double.infinity,
                   height: double.infinity,
                   errorBuilder: (context, error, stackTrace) =>
@@ -51,11 +51,12 @@ class CharacterCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     character.name,
@@ -64,7 +65,7 @@ class CharacterCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                     ),
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
@@ -75,6 +76,30 @@ class CharacterCard extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
+                  if (character.birthYear != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Nacimiento: ${character.birthYear}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  if (character.homeworld != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Planeta: ${character.homeworld}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ],
               ),
             ),
