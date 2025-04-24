@@ -6,6 +6,8 @@ class CharacterState {
   final bool isLoading;
   final String searchQuery;
   final String? error;
+  final int currentPage;
+  final int itemsPerPage;
 
   CharacterState({
     required this.allCharacters,
@@ -13,6 +15,8 @@ class CharacterState {
     required this.isLoading,
     required this.searchQuery,
     this.error,
+    required this.currentPage,
+    required this.itemsPerPage,
   });
 
   CharacterState copyWith({
@@ -21,6 +25,8 @@ class CharacterState {
     bool? isLoading,
     String? searchQuery,
     String? error,
+    int? currentPage,
+    int? itemsPerPage,
   }) {
     return CharacterState(
       allCharacters: allCharacters ?? this.allCharacters,
@@ -28,6 +34,8 @@ class CharacterState {
       isLoading: isLoading ?? this.isLoading,
       searchQuery: searchQuery ?? this.searchQuery,
       error: error,
+      currentPage: currentPage ?? this.currentPage,
+      itemsPerPage: itemsPerPage ?? this.itemsPerPage,
     );
   }
 
@@ -38,6 +46,12 @@ class CharacterState {
       isLoading: false,
       searchQuery: '',
       error: null,
+      currentPage: 1,
+      itemsPerPage: 10,
     );
   }
+
+  int get totalPages => (allCharacters.length / itemsPerPage).ceil();
+  bool get hasNextPage => currentPage < totalPages;
+  bool get hasPreviousPage => currentPage > 1;
 }
