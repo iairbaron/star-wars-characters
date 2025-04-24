@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/character.dart';
 import '../models/character_state.dart';
 import '../services/character_service.dart';
 import '../services/storage_service.dart';
@@ -59,20 +60,43 @@ class CharacterController extends StateNotifier<CharacterState> {
   Future<void> toggleFavorite(int characterId) async {
     await _storageService.toggleFavoriteCharacter(characterId);
     
+    // Actualizar el estado de favorito en allCharacters
+    final updatedAllCharacters = state.allCharacters.map((character) {
+      if (character.id == characterId) {
+        return character.copyWith(isFavorite: !character.isFavorite);
+      }
+      return character;
+    }).toList();
+
+    // Si estamos mostrando solo favoritos y desfavorecemos un personaje,
+    // debemos removerlo de displayedCharacters
+    List<Character> updatedDisplayedCharacters;
+    if (state.showOnlyFavorites) {
+      updatedDisplayedCharacters = state.displayedCharacters
+          .where((character) => 
+              character.id != characterId || !character.isFavorite)
+          .toList();
+    } else {
+      updatedDisplayedCharacters = state.displayedCharacters.map((character) {
+        if (character.id == characterId) {
+          return character.copyWith(isFavorite: !character.isFavorite);
+        }
+        return character;
+      }).toList();
+    }
+
     state = state.copyWith(
-      allCharacters: state.allCharacters.map((character) {
-        if (character.id == characterId) {
-          return character.copyWith(isFavorite: !character.isFavorite);
-        }
-        return character;
-      }).toList(),
-      displayedCharacters: state.displayedCharacters.map((character) {
-        if (character.id == characterId) {
-          return character.copyWith(isFavorite: !character.isFavorite);
-        }
-        return character;
-      }).toList(),
+      allCharacters: updatedAllCharacters,
+      displayedCharacters: updatedDisplayedCharacters,
     );
+
+    // Si la página actual está vacía después de desfavorear, retroceder una página
+    if (state.showOnlyFavorites && 
+        state.displayedCharacters.isEmpty && 
+        state.currentPage > 1) {
+      state = state.copyWith(currentPage: state.currentPage - 1);
+      _updateDisplayedCharacters();
+    }
   }
 
   void nextPage() {
@@ -125,6 +149,14 @@ class CharacterController extends StateNotifier<CharacterState> {
   void toggleFavoriteFilter() {
     state = state.copyWith(
       showOnlyFavorites: !state.showOnlyFavorites,
+      currentPage: 1,
+    );
+    _updateDisplayedCharacters();
+  }
+
+  void setGenderFilter(String? gender) {
+    state = state.copyWith(
+      selectedGender: gender,
       currentPage: 1,
     );
     _updateDisplayedCharacters();
