@@ -15,6 +15,9 @@ class CharacterCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Watch provider state to get the latest favorite status
+    final state = ref.watch(characterControllerProvider);
+    final isFavorite = state.allCharacters.firstWhere((c) => c.id == character.id).isFavorite;
     return Stack(
       children: [
         Card(
@@ -52,8 +55,8 @@ class CharacterCard extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
-                  character.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: character.isFavorite ? Colors.red : Colors.grey,
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : Colors.grey,
                   size: 24,
                 ),
               ),
