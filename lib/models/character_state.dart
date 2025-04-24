@@ -8,6 +8,7 @@ class CharacterState {
   final String? error;
   final int currentPage;
   final int itemsPerPage;
+  final bool showOnlyFavorites;
 
   CharacterState({
     required this.allCharacters,
@@ -17,6 +18,7 @@ class CharacterState {
     this.error,
     required this.currentPage,
     required this.itemsPerPage,
+    required this.showOnlyFavorites,
   });
 
   CharacterState copyWith({
@@ -27,6 +29,7 @@ class CharacterState {
     String? error,
     int? currentPage,
     int? itemsPerPage,
+    bool? showOnlyFavorites,
   }) {
     return CharacterState(
       allCharacters: allCharacters ?? this.allCharacters,
@@ -36,6 +39,7 @@ class CharacterState {
       error: error,
       currentPage: currentPage ?? this.currentPage,
       itemsPerPage: itemsPerPage ?? this.itemsPerPage,
+      showOnlyFavorites: showOnlyFavorites ?? this.showOnlyFavorites,
     );
   }
 
@@ -48,10 +52,28 @@ class CharacterState {
       error: null,
       currentPage: 1,
       itemsPerPage: 12,
+      showOnlyFavorites: false,
     );
   }
 
-  int get totalPages => (allCharacters.length / itemsPerPage).ceil();
+  int get totalPages => (filteredCharacters.length / itemsPerPage).ceil();
   bool get hasNextPage => currentPage < totalPages;
   bool get hasPreviousPage => currentPage > 1;
+
+  List<Character> get filteredCharacters {
+    List<Character> filtered = allCharacters;
+    
+    if (showOnlyFavorites) {
+      filtered = filtered.where((char) => char.isFavorite).toList();
+    }
+    
+    if (searchQuery.isNotEmpty) {
+      filtered = filtered
+          .where((char) =>
+              char.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
+    }
+    
+    return filtered;
+  }
 }

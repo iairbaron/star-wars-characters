@@ -4,6 +4,7 @@ import '../controllers/character_controller.dart';
 import '../widgets/character_grid.dart';
 import '../widgets/error_view.dart';
 import '../widgets/pagination_controls.dart';
+import '../widgets/filter_bar.dart';
 import 'search_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -122,12 +123,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             )
           : Column(
               children: [
+                const FilterBar(),
                 Expanded(
                   child: state.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : state.displayedCharacters.isEmpty
-                          ? const Center(
-                              child: Text('No hay personajes disponibles'))
+                          ? Center(
+                              child: Text(
+                                state.showOnlyFavorites
+                                    ? 'No hay personajes favoritos'
+                                    : 'No hay personajes disponibles',
+                              ),
+                            )
                           : CharacterGrid(
                               characters: state.displayedCharacters,
                             ),

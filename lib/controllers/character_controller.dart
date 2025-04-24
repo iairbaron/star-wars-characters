@@ -112,13 +112,7 @@ class CharacterController extends StateNotifier<CharacterState> {
   void _updateDisplayedCharacters() {
     final start = (state.currentPage - 1) * state.itemsPerPage;
     final end = start + state.itemsPerPage;
-    final filteredCharacters = state.searchQuery.isEmpty
-        ? state.allCharacters
-        : state.allCharacters
-            .where((character) => character.name
-                .toLowerCase()
-                .contains(state.searchQuery.toLowerCase()))
-            .toList();
+    final filteredCharacters = state.filteredCharacters;
 
     state = state.copyWith(
       displayedCharacters: filteredCharacters.sublist(
@@ -126,5 +120,13 @@ class CharacterController extends StateNotifier<CharacterState> {
         end.clamp(0, filteredCharacters.length),
       ),
     );
+  }
+
+  void toggleFavoriteFilter() {
+    state = state.copyWith(
+      showOnlyFavorites: !state.showOnlyFavorites,
+      currentPage: 1,
+    );
+    _updateDisplayedCharacters();
   }
 }
