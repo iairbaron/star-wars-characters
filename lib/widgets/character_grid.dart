@@ -11,11 +11,11 @@ class CharacterGrid extends StatelessWidget {
   });
 
   int _getCrossAxisCount(double width) {
-    if (width < 600) return 1;  // Móviles
-    if (width < 900) return 2;  // Tablets pequeñas
-    if (width < 1200) return 3; // Tablets grandes
-    if (width < 1500) return 4; // Pantallas medianas
-    return 5;                   // Pantallas grandes
+    if (width < 600) return 1;
+    if (width < 900) return 2;  
+    if (width < 1200) return 3;
+    if (width < 1500) return 4; 
+    return 5;                   
   }
 
   @override

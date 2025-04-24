@@ -6,6 +6,7 @@ import '../widgets/error_view.dart';
 import '../widgets/pagination_controls.dart';
 import '../widgets/filter_bar.dart';
 import 'search_page.dart';
+import '../widgets/home_app_bar.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -15,7 +16,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  bool _isHovered = false;
 
   @override
   void initState() {
@@ -56,66 +56,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final controller = ref.read(characterControllerProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Star Wars Characters'),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MouseRegion(
-              onEnter: (_) => setState(() => _isHovered = true),
-              onExit: (_) => setState(() => _isHovered = false),
-              child: GestureDetector(
-                onTap: _openSearchPage,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: _isHovered 
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                  child: AbsorbPointer(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Buscar personaje...',
-                        hintStyle: TextStyle(
-                          color: _isHovered
-                              ? Theme.of(context).hintColor
-                              : Theme.of(context).hintColor.withOpacity(0.7),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: _isHovered
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).iconTheme.color,
-                        ),
-                        filled: true,
-                        fillColor: Theme.of(context).colorScheme.surface,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: HomeAppBar(onSearchTap: _openSearchPage),
       body: state.error != null
           ? ErrorView(
               error: state.error!,
