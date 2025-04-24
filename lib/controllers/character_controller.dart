@@ -153,12 +153,4 @@ class CharacterController extends StateNotifier<CharacterState> {
     );
     _updateDisplayedCharacters();
   }
-
-  void setGenderFilter(String? gender) {
-    state = state.copyWith(
-      selectedGender: gender,
-      currentPage: 1,
-    );
-    _updateDisplayedCharacters();
-  }
 }

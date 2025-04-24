@@ -9,7 +9,6 @@ class CharacterState {
   final int currentPage;
   final int itemsPerPage;
   final bool showOnlyFavorites;
-  final String? selectedGender;
 
   CharacterState({
     required this.allCharacters,
@@ -20,7 +19,6 @@ class CharacterState {
     required this.currentPage,
     required this.itemsPerPage,
     required this.showOnlyFavorites,
-    this.selectedGender,
   });
 
   CharacterState copyWith({
@@ -32,7 +30,6 @@ class CharacterState {
     int? currentPage,
     int? itemsPerPage,
     bool? showOnlyFavorites,
-    String? selectedGender,
   }) {
     return CharacterState(
       allCharacters: allCharacters ?? this.allCharacters,
@@ -43,7 +40,6 @@ class CharacterState {
       currentPage: currentPage ?? this.currentPage,
       itemsPerPage: itemsPerPage ?? this.itemsPerPage,
       showOnlyFavorites: showOnlyFavorites ?? this.showOnlyFavorites,
-      selectedGender: selectedGender ?? this.selectedGender,
     );
   }
 
@@ -57,7 +53,6 @@ class CharacterState {
       currentPage: 1,
       itemsPerPage: 12,
       showOnlyFavorites: false,
-      selectedGender: null,
     );
   }
 
@@ -72,12 +67,6 @@ class CharacterState {
       filtered = filtered.where((char) => char.isFavorite).toList();
     }
     
-    if (selectedGender != null) {
-      filtered = filtered.where((char) => 
-        char.gender.toLowerCase() == selectedGender!.toLowerCase()
-      ).toList();
-    }
-    
     if (searchQuery.isNotEmpty) {
       filtered = filtered
           .where((char) =>
@@ -86,9 +75,5 @@ class CharacterState {
     }
     
     return filtered;
-  }
-
-  Set<String> get availableGenders {
-    return allCharacters.map((char) => char.gender).toSet();
   }
 }
