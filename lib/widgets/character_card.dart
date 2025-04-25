@@ -15,7 +15,9 @@ class CharacterCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch provider state to get the latest favorite status
+    if (character.name.toLowerCase() == 'wedge antilles') {
+      debugPrint('Wedge Antilles image URL: ${character.image}');
+    }
     final state = ref.watch(characterControllerProvider);
     final isFavorite = state.allCharacters.firstWhere((c) => c.id == character.id).isFavorite;
     return Stack(

@@ -10,15 +10,11 @@ class CharacterService {
     try {
       final response = await http.get(Uri.parse(baseUrl));
 
-      print('Status Code: ${response.statusCode}');
-      print('Response Headers: ${response.headers}');
 
       if (response.statusCode == 200) {
         // Intentar decodificar el JSON primero
         final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-        print(
-          'Datos decodificados correctamente. Número de personajes: ${data.length}',
-        );
+
 
         // Convertir cada elemento a Character
         return data.map((json) {

@@ -44,8 +44,13 @@ class CharacterController extends StateNotifier<CharacterState> {
         );
       }).toList();
 
+      final validCharacters = charactersWithFavorites.where((c) {
+        final url = c.image.toLowerCase();
+        return url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png');
+      }).toList();
+
       state = state.copyWith(
-        allCharacters: charactersWithFavorites,
+        allCharacters: validCharacters,
         isLoading: false,
       );
       _updateDisplayedCharacters();
